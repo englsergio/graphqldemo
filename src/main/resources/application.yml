@@ -1,0 +1,13 @@
+spring:
+  sql:
+    init:
+      mode: always
+  graphql:
+    graphiql:
+      enabled: true
+
+graphql:
+  servlet:
+    mapping: /graphql
+  tools:
+    schema-location-pattern: "classpath*:graphql/**/*/graphqls"
