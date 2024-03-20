@@ -28,7 +28,7 @@ public class Bootstrap implements CommandLineRunner {
             try(InputStream dataInputStream = this.getClass().getResourceAsStream("/data/posts.json")) {
                 ObjectReader readerForType = reader.forType(new TypeReference<List<Post>>() {});
                 List<Post> postList = readerForType.readValue(dataInputStream);
-                log.info("{} posts lidos do arquivo posts.json", postList.size());
+                log.info("-> {} posts lidos do arquivo posts.json", postList.size());
                 repository.saveAll(postList);
             } catch (IOException exception) {
                 throw new RuntimeException("Não foi possível ler arquivo json.");

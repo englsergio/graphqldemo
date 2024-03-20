@@ -1,4 +1,9 @@
 spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: myuser
+    password: pass
+    url: jdbc:postgresql://host.docker.internal:5432/blog
   sql:
     init:
       mode: always
@@ -6,6 +11,7 @@ spring:
     graphiql:
       enabled: true
 
+# default address for querying GUI: localhost:8080/graphiql
 graphql:
   servlet:
     mapping: /graphql
