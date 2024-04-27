@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+  labels:
+    app: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      # is a common practice to use app key (can be whatever)
+      app: mongo
+  # blueprint / configuration of the pod for this deployment
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:5.0.26-focal
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: mongo-user
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: mongo-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector: # should match the labels in the pod that will be called with this service
+    app: mongo
+  ports: # in this case mongo-service will forward any request made to 27017(port) to 27017(targetPort) container/pod port.
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017 # port of the pods that belong to the service
