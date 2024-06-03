@@ -6,6 +6,7 @@ import com.lsalmeida.graphqldemo.records.Post;
 import com.lsalmeida.graphqldemo.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,6 @@ public class Bootstrap implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-
         if (repository.count() == 0) {
             try(InputStream dataInputStream = this.getClass().getResourceAsStream("/data/posts.json")) {
                 ObjectReader readerForType = reader.forType(new TypeReference<List<Post>>() {});

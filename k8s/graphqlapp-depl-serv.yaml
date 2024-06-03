@@ -18,25 +18,27 @@ spec:
     spec:
       containers:
         - name: graphqldemo
-          image: lsalmeida/graphqldemo:latest
+#          image: lsalmeida/graphqldemo:latest
+          image: graphqlapp:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
           env:
-          - name: mongo-user
+          - name: psql-user
             valueFrom:
               secretKeyRef:
-                name: mongo-secret
-                key: mongo-user
-          - name: mongo-password
+                name: psql-secret
+                key: psql-user
+          - name: psql-password
             valueFrom:
               secretKeyRef:
-                name: mongo-secret
-                key: mongo-password
+                name: psql-secret
+                key: psql-password
           - name: db-url
             valueFrom:
               configMapKeyRef:
-                name: mongo-config
-                key: mongo-url
+                name: psql-config
+                key: psql-url
 ---
 apiVersion: v1
 kind: Service
@@ -46,7 +48,7 @@ spec:
   type: NodePort # External service type (require nodePort)
   selector: # should match the labels in the pod that will be called with this service
     app: graphqlapp
-  ports: # in this case mongo-service will forward any request made to 27017(port) to 27017(targetPort) container/pod port.
+  ports: # in this case psql-service will forward any request made to 27017(port) to 27017(targetPort) container/pod port.
     - protocol: TCP
       port: 8080
       targetPort: 8080 # port of the pods that belong to the service

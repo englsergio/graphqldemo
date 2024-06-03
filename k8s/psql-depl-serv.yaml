@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: psql
+  labels:
+    app: psql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      # is a common practice to use app key (can be whatever)
+      app: psql
+  # blueprint / configuration of the pod for this deployment
+  template:
+    metadata:
+      labels:
+        app: psql
+    spec:
+      containers:
+        - name: psql
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: psql-secret
+                  key: psql-user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: psql-secret
+                  key: psql-password
+            - name: POSTGRES_DB
+              value: blog
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: psql-service
+spec:
+  selector: # should match the labels in the pod that will be called with this service
+    app: psql
+  ports: # in this case psql-service will forward any request made to 5432(port) to 27017(targetPort) container/pod port.
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432 # port of the pods that belong to the service

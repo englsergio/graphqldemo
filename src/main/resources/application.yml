@@ -1,8 +1,8 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    username: ${mongo-user} #myuser
-    password: ${mongo-password} #pass
+    username: ${psql-user} #myuser
+    password: ${psql-password} #pass
     url: ${db-url:jdbc:postgresql://host.docker.internal:5432/blog}
   sql:
     init:
